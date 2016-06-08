@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Echo Test</title>
+</head>
+<body>
+    <div id="echoed"></div><br />
+    <form id="echo-form">
+        <input type="text" id="echo-text" style="width: 200px;" />
+        <button type="submit">Echo</button>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+    <script>
+        $(function(){
+            var s = new WebSocket('ws://' + location.host + '/ws/echo?echo_id={{ echo_id }}');
+            s.onopen = function(ev) {
+                console.log('Connected to ws://' + location.host + '/ws/echo');
+            };
+            s.onmessage = function(ev) {
+                $('#echoed').html(ev.data);
+            };
+            $('#echo-form').submit(function(event){
+                event.preventDefault();
+                s.send($('#echo-text').val());
+            });
+        });
+    </script>
+</body>
+</html>
